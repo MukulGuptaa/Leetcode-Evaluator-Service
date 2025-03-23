@@ -5,7 +5,9 @@
     "rules": {
         "semi": ["error", "always"],
         "simple-import-sort/imports": "error",
-        "simple-import-sort/exports": "error"
+        "simple-import-sort/exports": "error",
+        "@typescript-eslint/explicit-module-boundary-types": "off"
+
     },
     "plugins": ["simple-import-sort"]
   }
