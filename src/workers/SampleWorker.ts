@@ -7,7 +7,6 @@ export default function SampleWorker(queueName: string){
     new Worker(
         queueName, 
         async (job: Job) => {
-            console.log("Worker of the job called");
             if(job.name === "SampleJob"){
                 const sampleJobInstance = new Samplejob(job.data);
                 sampleJobInstance.handler(job);
