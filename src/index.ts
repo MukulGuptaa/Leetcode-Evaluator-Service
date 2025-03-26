@@ -27,8 +27,11 @@ x = input()
 y = input()
 print("value of x is", x)
 print("value of y is", y)`;
-    runPython(code, `100
-200`);
+
+    const inputTestcase = `100
+200`;
+
+    runPython(code, inputTestcase);
 
 
 });
