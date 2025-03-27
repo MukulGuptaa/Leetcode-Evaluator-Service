@@ -3,7 +3,7 @@ import express from "express";
 
 import bullBoardAdapter from "./config/bullBoardConfig";
 import serverConfig from "./config/serverConfig";
-import runPython from "./containers/runPythonDocker";
+import runCpp from "./containers/runCpp";
 import apiRouter from "./routes";
 import SampleWorker from "./workers/SampleWorker";
 
@@ -23,15 +23,24 @@ app.listen(serverConfig.PORT, () => {
     SampleWorker('SampleQueue');
 
     const code = `
-x = input() 
-y = input()
-print("value of x is", x)
-print("value of y is", y)`;
+    #include<stdio.h>
+    #include<iostream>
+    using namespace std;
+    int main(){
+    int n;
+    cin>>n;
+    cout<<"Value provided is: "<<n<<endl;
+    for(int i=0;i<n;i++){
+        cout<<i<<" ";
+    }
+    return 0;
+    }
+    `;
 
-    const inputTestcase = `100
-200`;
+    const inputCase = `8`;
 
-    runPython(code, inputTestcase);
+
+    runCpp(code, inputCase);
 
 
 });
