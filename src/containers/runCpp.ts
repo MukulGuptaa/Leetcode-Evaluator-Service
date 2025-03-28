@@ -16,7 +16,6 @@ async function runCpp(code: string, inputTestCase: string){
     const rawLogBuffer: Buffer[] = [];
 
     const cmd : string = `echo '${code.replace(/'/g, "\\'")}' > main.cpp && g++ main.cpp -o main && echo '${inputTestCase.replace(/'/g, "\\'")}' | ./main`;
-    console.log("Command is: ", cmd);
     const cppDockerContainer = await createContainer(CPP_IMAGE, ['/bin/sh','-c',cmd]);
 
     await cppDockerContainer.start();
@@ -34,18 +33,17 @@ async function runCpp(code: string, inputTestCase: string){
     });
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    await new Promise((resolve, _) => {
+    const response = await new Promise((resolve, _) => {
         loggerStream.on('end', () => {
-            console.log(rawLogBuffer);
             const completeBuffer = Buffer.concat(rawLogBuffer);
             const decodedStream = decodeDockerStream(completeBuffer);
             console.log(decodedStream);
-            console.log("Output: ", decodedStream.stdout);
             resolve(decodedStream);
         });
     });
 
     await cppDockerContainer.remove();
+    return response;
 }
 
 export default runCpp;

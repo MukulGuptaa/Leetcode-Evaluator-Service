@@ -6,3 +6,6 @@ export const CPP_IMAGE = "gcc:latest";
 // Docker stream header will contain data about type of stream i.e. stdout/stderr
 // and the length of the data.
 export const DOCKER_STREAM_HEADER_SIZE = 8;
+
+export const SUBMISSION_QUEUE = "SubmissionQueue";
+export const SUBMISSION_JOB = "SubmissionJob";
