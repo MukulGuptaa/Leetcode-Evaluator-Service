@@ -7,14 +7,15 @@ import pullImage from "./pullImage";
 
 
 class CppCodeExecutor implements CodeExecutorStrategy{
-    async execute(code: string, inputTestCase: string): Promise<ExecutionResponse> {
+    async execute(code: string, inputTestCase: string, outputTestCase: string): Promise<ExecutionResponse> {
         console.log('Initialising a new cpp docker container');
-
+        console.log(code, inputTestCase, outputTestCase);
         await pullImage(CPP_IMAGE);
 
         const rawLogBuffer: Buffer[] = [];
 
         const cmd : string = `echo '${code.replace(/'/g, "\\'")}' > main.cpp && g++ main.cpp -o main && echo '${inputTestCase.replace(/'/g, "\\'")}' | ./main`;
+        console.log("Command to be run on docker container bash is: ", cmd);
         const cppDockerContainer = await createContainer(CPP_IMAGE, ['/bin/sh','-c',cmd]);
 
         await cppDockerContainer.start();
@@ -45,7 +46,6 @@ class CppCodeExecutor implements CodeExecutorStrategy{
     async fetchDecodedStream(loggerStream: NodeJS.ReadableStream, rawLogBuffer: Buffer[]) : Promise<string> {
         return new Promise((resolve, reject) => {
             loggerStream.on('end', () => {
-                console.log(rawLogBuffer);
                 const completeBuffer = Buffer.concat(rawLogBuffer);
                 const decodedStream = decodeDockerStream(completeBuffer);
                 console.log(decodedStream);

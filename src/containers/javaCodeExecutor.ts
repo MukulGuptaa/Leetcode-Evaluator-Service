@@ -6,8 +6,9 @@ import decodeDockerStream from "./dockerHelper";
 import pullImage from "./pullImage";
 
 class JavaCodeExecutor implements CodeExecutorStrategy{
-    async execute(code: string, inputTestCase: string): Promise<ExecutionResponse> {
+    async execute(code: string, inputTestCase: string, outputTestCase: string): Promise<ExecutionResponse> {
         console.log('Initialising a new java docker container');
+        console.log(code, inputTestCase, outputTestCase);
 
         await pullImage(JAVA_IMAGE);
 

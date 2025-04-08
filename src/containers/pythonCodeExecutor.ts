@@ -7,8 +7,10 @@ import pullImage from "./pullImage";
 
 
 class PythonCodeExecutor implements CodeExecutorStrategy{
-    async execute(code: string, inputTestCase: string): Promise<ExecutionResponse> {
-        console.log(`Code: ${code}`);
+    async execute(code: string, inputTestCase: string, outputTestCase: string): Promise<ExecutionResponse> {
+        console.log('Initialising a new cpp docker container');
+        console.log(code, inputTestCase, outputTestCase);
+
 
         await pullImage(PYTHON_IMAGE);
 

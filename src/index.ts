@@ -3,7 +3,6 @@ import express from "express";
 
 import bullBoardAdapter from "./config/bullBoardConfig";
 import serverConfig from "./config/serverConfig";
-import submissionQueueProducer from "./producers/submissionQueueProducer";
 import apiRouter from "./routes";
 import { SUBMISSION_QUEUE } from "./utils/constants";
 import SubmissionWorker from "./workers/SubmissionWorker";
@@ -23,31 +22,31 @@ app.listen(serverConfig.PORT, () => {
 
     SubmissionWorker(SUBMISSION_QUEUE);
 
-    const code = `
-    #include<stdio.h>
-    #include<iostream>
-    using namespace std;
-    int main(){
-    int n;
-    cin>>n;
-    cout<<"Value provided is: "<<n<<endl;
-    for(int i=0;i<n;i++){
-        cout<<i<<" ";
-    }
-    return 0;
-    }
-    `;
+    // const code = `
+    // #include<stdio.h>
+    // #include<iostream>
+    // using namespace std;
+    // int main(){
+    // int n;
+    // cin>>n;
+    // cout<<"Value provided is: "<<n<<endl;
+    // for(int i=0;i<n;i++){
+    //     cout<<i<<" ";
+    // }
+    // return 0;
+    // }
+    // `;
 
-    const inputCase = `8`;
+    // const inputCase = `8`;
 
 
-    submissionQueueProducer({
-        "1234": {
-            language: "CPP",
-            inputCase,
-            code
-        }
-    });
+    // submissionQueueProducer({
+    //     "1234": {
+    //         language: "CPP",
+    //         inputCase,
+    //         code
+    //     }
+    // });
 
     // runCpp(code, inputCase);
 

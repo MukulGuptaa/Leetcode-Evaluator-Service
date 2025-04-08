@@ -24,10 +24,12 @@ export default class Samplejob implements IJob{
             const codeLanguage = this.payload[key].language;
             const inputCase = this.payload[key].inputCase;
             const code = this.payload[key].code;
+            const outputTestCase = this.payload[key].outputCase;
 
             const strategy : CodeExecutorStrategy | null = CreateCodeExectorObject(codeLanguage);
+            console.log("payload data:\n", this.payload[key]);
             if(strategy != null){
-                const response = await strategy.execute(code, inputCase);
+                const response = await strategy.execute(code, inputCase, outputTestCase);
                 if(response.status === "COMPLETED"){
                     console.log("Code executed successfully");
                     console.log(response);
