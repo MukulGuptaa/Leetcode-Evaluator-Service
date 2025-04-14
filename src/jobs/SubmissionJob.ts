@@ -4,6 +4,7 @@ import { IJob } from "../types/bullMqJobDefinition";
 import CodeExecutorStrategy from "../types/CodeExecutorStrategy";
 import { SubmissionPayload } from "../types/submissionPayload";
 import CreateCodeExectorObject from "../utils/CodeExecutorFactory";
+import evaluationQueueProducer from "../producers/evaluationQueueProducer";
 
 
 export default class Samplejob implements IJob{
@@ -30,7 +31,8 @@ export default class Samplejob implements IJob{
             console.log("payload data:\n", this.payload[key]);
             if(strategy != null){
                 const response = await strategy.execute(code, inputCase, outputTestCase);
-                if(response.status === "COMPLETED"){
+                evaluationQueueProducer({response, userId: this.payload[key].userId, submissionId: this.payload[key].submissionId});
+                if(response.status === "SUCCESS"){
                     console.log("Code executed successfully");
                     console.log(response);
                 }else{

@@ -34,8 +34,17 @@ class CppCodeExecutor implements CodeExecutorStrategy{
 
         try {
             const codeResponse : string = await this.fetchDecodedStream(loggerStream, rawLogBuffer);
-            return {output: codeResponse, status: "COMPLETED"};
+
+            if(codeResponse.trim() === outputTestCase.trim()) {
+                return {output: codeResponse, status: "SUCCESS"};
+            } else {
+                return {output: codeResponse, status: "WA"};
+            }
         } catch (error) {
+            console.log("Error occurred", error);
+            if(error === "TLE") {
+                await cppDockerContainer.kill();
+            }
             return {output: error as string, status: "ERROR"}
         } finally{
             await cppDockerContainer.remove();
@@ -45,11 +54,16 @@ class CppCodeExecutor implements CodeExecutorStrategy{
 
     async fetchDecodedStream(loggerStream: NodeJS.ReadableStream, rawLogBuffer: Buffer[]) : Promise<string> {
         return new Promise((resolve, reject) => {
+            const timeout = setTimeout(() => {
+                console.log("Timeout called");
+                reject("TLE");
+            }, 2000);
             loggerStream.on('end', () => {
+                clearTimeout(timeout);
                 const completeBuffer = Buffer.concat(rawLogBuffer);
                 const decodedStream = decodeDockerStream(completeBuffer);
-                console.log(decodedStream);
-                console.log("Output: ", decodedStream.stdout);
+                // console.log(decodedStream);
+                // console.log("Output: ", decodedStream.stdout);
                 if(decodedStream.stderr){
                     reject(decodedStream.stderr);
                 }else{
